@@ -7,6 +7,8 @@ from sqlalchemy.sql import text
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import json
+
+
 app = FastAPI()
 
 origins =[
@@ -62,9 +64,9 @@ def get_station_near_forestfire(forest_id:int ,radius:Optional[int] = 100000):
     END
             )
         ) FROM (
-        select s.* from 
-	  public.forest_fire f left join public.fire_station s on st_dwithin(f.geom::geography , s.geom::geography, :radius)
-	  where f.forest_id = :forest_id) as t
+        select s.* from public.forest_fire f left join 
+public.fire_station s on st_dwithin(f.geom::geography , s.geom:: geography, :radius) where f.forest_id = :forest_id
+) as t
 """), {"forest_id": forest_id, "radius":radius})
 
     for r in rows:
@@ -90,11 +92,9 @@ def get_station_near_forestfire(forest_id:int ,radius:Optional[int] = 100000):
     END
   )
 )
-FROM (
- 
-select h.*  from 
-	  forest_fire f left join public.m_hosptials h on st_dwithin(f.geom::geography , h.geom::geography, 10000)
-	  where f.forest_id = 1 
+FROM ( 
+select h.* from public.forest_fire f left join 
+public.m_hospitals h on st_dwithin(f.geom::geography , h.geom:: geography, :radius) where f.forest_id = :forest_id
 ) AS t;
 
 """), {"forest_id": forest_id, "radius":radius})
@@ -124,9 +124,8 @@ def get_nearest_station(forest_id:int ,radius:Optional[int] = 100000):
   )
 )
 FROM (
- 
-select s.*,ST_distance(st_transform(f.geom,26986), st_transform(s.geom,26986)) as distance 	from public.forest_fire f left join 
-public.fire_station s on st_dwithin(f.geom::geography , s.geom:: geography, :radius) where f.forest_id = :forest_id
+select s.*,ST_distance(st_transform(f.geom,26986), st_transform(s.geom,26986)) as distance 	from forest_fire f left join 
+fire_station s on st_dwithin(f.geom::geography , s.geom:: geography, :radius) where f.forest_id = :forest_id
 order by distance asc
 ) AS t;
     """),{"forest_id": forest_id, "radius":radius})
@@ -138,6 +137,4 @@ order by distance asc
 
 
 
-if __name__ == "__main__":
-    uvicorn.run(app="main:app", reload=True)
     

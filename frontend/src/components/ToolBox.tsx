@@ -26,6 +26,7 @@ const ToolBox = () => {
     const [url, setUrl] = useState("")
 
 
+  
 
     const currentForest = useMemo(() => forestList.find((forest => (
         forest.properties.id === parseInt(formData.forest)
@@ -81,7 +82,6 @@ const ToolBox = () => {
 
     const addCurrentLayer = (layer: VectorLayer<VectorSource<Feature<Geometry>>>, mapObj: Map | null) => {
             
-        console.log(mapObj?.getLayers().getArray())
         let layersArray = mapObj?.getLayers().getArray()
         if (layersArray!.length <= 2) {
             mapObj?.addLayer(layer)
@@ -159,7 +159,7 @@ const ToolBox = () => {
             else {
                 let tempObj = parsedObj
                 let clonedObject = { type:"FeatureCollection", "features":  tempObj.features.slice(0,1)  }
-                console.log(clonedObject)
+
                 const vectorSource = new VectorSource({
                     features: new GeoJSON().readFeatures(JSON.stringify(clonedObject)),
                 });

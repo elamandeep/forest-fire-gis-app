@@ -1,7 +1,12 @@
 from sqlalchemy import MetaData, create_engine 
 from sqlalchemy.orm import declarative_base 
+from dotenv import load_dotenv
+import os
 
-engine = create_engine(url='postgresql://postgres:pOsTgRess@localhost:5432/emberwatch')
+load_dotenv()
+
+
+engine = create_engine(url=os.environ["DATABASE_URL"])
 
 metadata = MetaData()
 base = declarative_base(metadata=metadata)
