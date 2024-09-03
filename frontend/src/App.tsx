@@ -1,18 +1,18 @@
 import { lazy } from "react"
 import { Toaster } from "react-hot-toast"
 const Map = lazy(() => import("./components/MapComponent"))
-const ToolBox = lazy(()=>import("./components/ToolBox"))
+const ToolBox = lazy(() => import("./components/ToolBox"))
 
 function App() {
- 
-  
+
+
 
 
   return (
     <>
-    <Toaster />
+      <Toaster />
       <Map />
-      <ToolBox/>
+      <ToolBox />
     </>
   )
 }
